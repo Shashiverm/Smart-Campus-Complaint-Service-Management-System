@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --bg-gradient: radial-gradient(circle at 20% 10%, #f1ebd8 0%, #d8ecf5 45%, #f5f9ff 100%);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg-gradient);
+  color: #11212d;
+  min-height: 100vh;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 15px 35px rgba(17, 33, 45, 0.08);
+  border-radius: 1rem;
+}

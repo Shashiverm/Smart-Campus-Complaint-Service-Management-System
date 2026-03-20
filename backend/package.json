@@ -1,0 +1,42 @@
+{
+  "name": "smart-campus-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Smart Campus Complaint & Service Management System",
+  "main": "src/server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test test/**/*.test.js",
+    "seed:admin": "node src/utils/seedAdmin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "latest",
+    "bullmq": "latest",
+    "cloudinary": "latest",
+    "compression": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-rate-limit": "latest",
+    "express-validator": "latest",
+    "helmet": "latest",
+    "ioredis": "latest",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest",
+    "morgan": "latest",
+    "multer": "latest",
+    "multer-storage-cloudinary": "latest",
+    "nodemailer": "latest",
+    "socket.io": "latest",
+    "swagger-ui-express": "latest",
+    "yamljs": "latest"
+  },
+  "devDependencies": {
+    "nodemon": "latest",
+    "supertest": "latest"
+  }
+}

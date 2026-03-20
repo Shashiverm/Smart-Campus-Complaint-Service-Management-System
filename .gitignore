@@ -1,0 +1,88 @@
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+
+# Dependencies
+node_modules/
+pip-packages/
+venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+.tox/
+.next/
+out/
+.nuxt/
+.cache/
+.vuepress/dist/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build outputs
+dist/
+build/
+*.o
+*.so
+
+# Runtime
+*.log
+logs/
+tmp/
+temp/
+pids/
+*.pid
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets and credentials
+*.pem
+*.key
+*.cer
+*.pfx
+secrets/
+credentials.json
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Testing
+coverage/
+.pytest_cache/
+*.pyc
+
+# API keys and tokens
+.apikeys
+tokens.json
+*.token
+*.secret
+
+# User-specific files
+*.user
+local.properties
+
+# Local tooling and generated data
+backend/.nyc_output/
+backend/coverage/
+frontend/coverage/
+frontend/.turbo/

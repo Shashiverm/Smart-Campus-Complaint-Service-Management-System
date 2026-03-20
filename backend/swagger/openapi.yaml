@@ -1,0 +1,59 @@
+openapi: 3.0.3
+info:
+  title: Smart Campus Complaint API
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/v1/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service healthy
+  /api/v1/auth/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login success
+  /api/v1/auth/register:
+    post:
+      summary: Register user (Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: User created
+  /api/v1/complaints:
+    post:
+      summary: Create complaint (Student)
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Complaint created
+    get:
+      summary: List complaints (Admin/Staff)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Complaints list
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
