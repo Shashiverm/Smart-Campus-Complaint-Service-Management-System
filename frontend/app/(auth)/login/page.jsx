@@ -26,7 +26,12 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const { data } = await api.post("/auth/login", { email, password });
+      const payload = { email, password };
+      if (role && roleTitleMap[role]) {
+        payload.role = role;
+      }
+
+      const { data } = await api.post("/auth/login", payload);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       router.push("/dashboard");
