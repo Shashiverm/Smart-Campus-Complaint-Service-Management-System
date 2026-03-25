@@ -40,10 +40,14 @@ export const registerUser = async (req, res) => {
   });
 };
 
-export const loginValidators = [body("email").isEmail(), body("password").notEmpty()];
+export const loginValidators = [
+  body("email").isEmail(),
+  body("password").notEmpty(),
+  body("role").optional().isIn(Object.values(ROLES))
+];
 
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   const user = await User.findOne({ email }).select("+password");
   if (!user || !(await user.comparePassword(password))) {
@@ -52,6 +56,10 @@ export const loginUser = async (req, res) => {
 
   if (!user.isActive) {
     return res.status(403).json({ message: "User is inactive" });
+  }
+
+  if (role && user.role !== role) {
+    return res.status(403).json({ message: "Please use the correct role login" });
   }
 
   const token = signToken(user);

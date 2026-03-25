@@ -18,8 +18,16 @@ import { ROLES } from "../utils/constants.js";
 
 const router = Router();
 
-router.post("/", protect, authorize(ROLES.STUDENT), upload.single("image"), createComplaintValidators, validateRequest, createComplaint);
-router.get("/my", protect, authorize(ROLES.STUDENT), getMyComplaints);
+router.post(
+  "/",
+  protect,
+  authorize(ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF),
+  upload.single("image"),
+  createComplaintValidators,
+  validateRequest,
+  createComplaint
+);
+router.get("/my", protect, authorize(ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF), getMyComplaints);
 router.get("/", protect, authorize(ROLES.ADMIN, ROLES.STAFF), getAllComplaints);
 router.get("/analytics", protect, authorize(ROLES.ADMIN), getComplaintAnalytics);
 router.patch("/:id/assign", protect, authorize(ROLES.ADMIN), assignComplaintValidators, validateRequest, assignComplaint);
