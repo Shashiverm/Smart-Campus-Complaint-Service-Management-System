@@ -9,6 +9,14 @@ dotenv.config();
 
 const startServer = async () => {
   try {
+    console.log("Environment check:");
+    console.log("- NODE_ENV:", process.env.NODE_ENV || "development");
+    console.log("- PORT:", process.env.PORT || 5000);
+    console.log("- MONGODB_URI:", process.env.MONGODB_URI ? "✓ Set" : "✗ Missing");
+    console.log("- REDIS_URL:", process.env.REDIS_URL ? "✓ Set" : "✗ Missing (optional)");
+    console.log("- SMTP_HOST:", process.env.SMTP_HOST ? "✓ Set" : "✗ Missing (optional)");
+
+    console.log("\nStarting server initialization...");
     await connectDB();
 
     const port = Number(process.env.PORT || 5000);
@@ -23,10 +31,12 @@ const startServer = async () => {
     startNotificationWorker();
 
     server.listen(port, () => {
-      console.log(`API running on port ${port}`);
+      console.log(`✓ API running on port ${port}`);
     });
   } catch (error) {
-    console.error("Failed to start server", error);
+    console.error("✗ Failed to start server");
+    console.error("Error:", error.message);
+    console.error("Stack:", error.stack);
     process.exit(1);
   }
 };
