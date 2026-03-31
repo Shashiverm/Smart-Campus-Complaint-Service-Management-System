@@ -1,20 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import api from "../../../lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [role, setRole] = useState("");
 
-  const role = searchParams.get("role");
+  useEffect(() => {
+    const currentRole = new URLSearchParams(window.location.search).get("role") || "";
+    setRole(currentRole);
+  }, []);
+
   const roleTitleMap = {
     student: "Student Login",
     faculty: "Faculty Login",
