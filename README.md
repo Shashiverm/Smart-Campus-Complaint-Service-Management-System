@@ -136,6 +136,11 @@ All powered by a sleek, modern, and intuitive user interface with smooth animati
 - Role-based access control (RBAC) - Student, Staff, Admin
 - Secure password hashing with bcryptjs
 
+**Role-Based Mandatory Registration Fields**
+- Student: name, email, phone, department, branch, class, roll number, registration number, batch
+- Faculty: name, college email, personal email, phone, department, faculty ID
+- Staff: name, department, phone, email, role in department, staff ID
+
 **Complaint Management**
 - Complaint CRUD workflow (create, read, update)
 - Submit complaints (Student)
@@ -154,6 +159,7 @@ All powered by a sleek, modern, and intuitive user interface with smooth animati
 - BullMQ queue for async job processing
 - Complaint submission confirmations
 - Status update notifications
+- Assignee email notifications when an issue is assigned
 
 **Analytics & Reporting**
 - Admin dashboard with complaint statistics
