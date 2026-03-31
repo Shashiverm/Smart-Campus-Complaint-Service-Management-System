@@ -72,7 +72,7 @@ All powered by a sleek, modern, and intuitive user interface with smooth animati
 
 - **Student**: Login, submit complaints, track status, view complaint history
 - **Staff/Faculty**: View assigned complaints, update status and progress, respond to complaints
-- **Admin**: Register all users, assign complaints to staff, monitor analytics, oversee system
+- **Admin/HOD/Director**: Register users, assign complaints, monitor analytics, download reports, and oversee closure workflow
 
 ## UI/UX Design
 
@@ -276,14 +276,16 @@ Endpoints via Nginx:
 - `POST /api/v1/auth/login`
 - `POST /api/v1/auth/register` (Admin only)
 - `GET /api/v1/auth/me`
-- `GET /api/v1/users` (Admin only)
+- `GET /api/v1/users` (Admin/HOD/Director)
 - `POST /api/v1/complaints` (Student/Faculty/Staff)
 - `GET /api/v1/complaints/my` (Student/Faculty/Staff)
-- `GET /api/v1/complaints` (Admin gets all, Staff/Faculty get assigned)
+- `GET /api/v1/complaints` (Admin/HOD/Director get all, Staff/Faculty get assigned)
 - `PATCH /api/v1/complaints/:id/assign` (Admin assigns to Staff/Faculty)
-- `PATCH /api/v1/complaints/:id/status` (Admin/Assigned Staff/Assigned Faculty)
+- `PATCH /api/v1/complaints/:id/category` (Admin/HOD/Director set routing category)
+- `PATCH /api/v1/complaints/:id/status` (Admin/HOD/Director/Assigned Staff/Assigned Faculty/Requester confirmation)
 - `GET /api/v1/complaints/:id/activity` (Owner/Assignee/Admin)
-- `GET /api/v1/complaints/analytics` (Admin)
+- `GET /api/v1/complaints/analytics` (Admin/HOD/Director)
+- `GET /api/v1/complaints/report/download` (Admin/HOD/Director CSV report)
 
 ## Security Notes
 
