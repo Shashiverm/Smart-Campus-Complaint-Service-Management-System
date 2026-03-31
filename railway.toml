@@ -1,0 +1,21 @@
+# Railway Configuration
+# This file helps Railway understand how to deploy the application
+
+root = "backend"
+
+[build]
+  builder = "nixpacks"
+
+[build.nixpacks]
+  # Railway will auto-detect Node.js, but we specify for clarity
+  nodejs = "20"
+  
+[start]
+  cmd = "npm start"
+
+[[services]]
+  name = "smart-campus-api"
+  buildCommand = "npm install"
+  startCommand = "npm start"
+  port = 5000
+  environment = "production"
