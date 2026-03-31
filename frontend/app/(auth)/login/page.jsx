@@ -22,6 +22,8 @@ export default function LoginPage() {
     student: "Student Login",
     faculty: "Faculty Login",
     staff: "Staff Login",
+    hod: "HOD Login",
+    director: "Director Login",
     admin: "Admin Login"
   };
   const loginTitle = roleTitleMap[role] || "Campus Login";
@@ -30,6 +32,8 @@ export default function LoginPage() {
     student: "👨‍🎓",
     faculty: "👨‍🏫",
     staff: "👨‍💼",
+    hod: "🧑‍🏫",
+    director: "🧑‍💼",
     admin: "👨‍💻"
   };
   const roleEmoji = roleEmojis[role] || "🔐";

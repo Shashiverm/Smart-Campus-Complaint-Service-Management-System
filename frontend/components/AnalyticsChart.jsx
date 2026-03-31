@@ -15,25 +15,28 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 export default function AnalyticsChart({ analytics }) {
   const pieData = {
-    labels: ["Open", "In Progress", "Resolved", "Rejected"],
+    labels: ["Open", "In Progress", "Pending Confirmation", "Resolved", "Rejected"],
     datasets: [
       {
         label: "Complaints",
         data: [
           analytics?.summary?.open || 0,
           analytics?.summary?.inProgress || 0,
+          analytics?.summary?.pendingConfirmation || 0,
           analytics?.summary?.resolved || 0,
           analytics?.summary?.rejected || 0
         ],
         backgroundColor: [
           "rgba(239, 68, 68, 0.7)",    // Red for Open
           "rgba(245, 158, 11, 0.7)",   // Orange for In Progress
+          "rgba(251, 146, 60, 0.7)",   // Amber for Pending Confirmation
           "rgba(16, 185, 129, 0.7)",   // Green for Resolved
           "rgba(100, 116, 139, 0.7)"   // Gray for Rejected
         ],
         borderColor: [
           "rgba(239, 68, 68, 1)",
           "rgba(245, 158, 11, 1)",
+          "rgba(251, 146, 60, 1)",
           "rgba(16, 185, 129, 1)",
           "rgba(100, 116, 139, 1)"
         ],
@@ -112,6 +115,13 @@ export default function AnalyticsChart({ analytics }) {
               <span className="text-slate-300">In Progress</span>
             </span>
             <span className="font-bold text-yellow-400">{analytics?.summary?.inProgress || 0}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-orange-400 rounded-full"></div>
+              <span className="text-slate-300">Pending Confirmation</span>
+            </span>
+            <span className="font-bold text-orange-300">{analytics?.summary?.pendingConfirmation || 0}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="flex items-center gap-2">

@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const complaintSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  category: z.string().min(2, "Category is required"),
+  category: z.string().optional(),
+  responsibilityCategory: z.enum(["hod", "director", "technical_staff", "faculty", "staff", "other"]),
   location: z.string().min(2, "Location is required"),
   department: z.string().min(2, "Department is required"),
   priority: z.enum(["low", "medium", "high", "critical"])
@@ -21,7 +22,7 @@ export default function ComplaintForm({ onSubmit }) {
     formState: { errors, isSubmitting }
   } = useForm({
     resolver: zodResolver(complaintSchema),
-    defaultValues: { priority: "medium" }
+    defaultValues: { priority: "medium", responsibilityCategory: "other", category: "" }
   });
 
   const handleFormSubmit = async (data) => {
@@ -76,14 +77,33 @@ export default function ComplaintForm({ onSubmit }) {
         {/* Category */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-slate-300">
-            Category <span className="text-red-400">*</span>
+            Category
           </label>
           <input 
             className="w-full px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg focus:bg-slate-700/50 focus:border-mint/50 focus:ring-2 focus:ring-mint/20 transition-all"
-            placeholder="e.g., Infrastructure, Cleanliness"
+            placeholder="e.g., Infrastructure, Cleanliness (optional)"
             {...register("category")} 
           />
           {errors.category && <p className="text-red-400 text-xs">⚠️ {errors.category.message}</p>}
+        </div>
+
+        {/* Responsibility Category */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-300">
+            Route To <span className="text-red-400">*</span>
+          </label>
+          <select
+            className="w-full px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg focus:bg-slate-700/50 focus:border-mint/50 focus:ring-2 focus:ring-mint/20 transition-all"
+            {...register("responsibilityCategory")}
+          >
+            <option value="hod">HOD</option>
+            <option value="director">Director</option>
+            <option value="technical_staff">Technical Staff</option>
+            <option value="faculty">Faculty</option>
+            <option value="staff">Staff</option>
+            <option value="other">Not Sure</option>
+          </select>
+          {errors.responsibilityCategory && <p className="text-red-400 text-xs">⚠️ {errors.responsibilityCategory.message}</p>}
         </div>
 
         {/* Location */}

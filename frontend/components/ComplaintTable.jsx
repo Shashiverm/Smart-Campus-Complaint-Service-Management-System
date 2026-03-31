@@ -2,13 +2,23 @@
 
 import { useState } from "react";
 
-export default function ComplaintTable({ complaints = [], onAssign, onStatusChange, users = [], role }) {
+export default function ComplaintTable({
+  complaints = [],
+  onAssign,
+  onStatusChange,
+  onCategoryChange,
+  onLoadActivity,
+  activityByComplaint = {},
+  users = [],
+  role
+}) {
   const [expandedId, setExpandedId] = useState(null);
 
   const getStatusBadge = (status) => {
     const statusConfig = {
       open: { label: "Open", color: "badge-open", icon: "🔴" },
       in_progress: { label: "In Progress", color: "badge-in-progress", icon: "🟡" },
+      pending_confirmation: { label: "Pending Confirmation", color: "badge-in-progress", icon: "🟠" },
       resolved: { label: "Resolved", color: "badge-resolved", icon: "🟢" },
       rejected: { label: "Rejected", color: "badge-rejected", icon: "⚫" }
     };
@@ -31,7 +41,9 @@ export default function ComplaintTable({ complaints = [], onAssign, onStatusChan
       <div className="card p-12 text-center">
         <p className="text-4xl mb-4">📭</p>
         <p className="text-slate-400">No complaints yet.</p>
-        {role === "student" && <p className="text-slate-500 text-sm mt-2">Submit a new complaint using the form above.</p>}
+        {["student", "faculty", "staff"].includes(role) && (
+          <p className="text-slate-500 text-sm mt-2">Submit a new complaint using the form above.</p>
+        )}
       </div>
     );
   }
@@ -48,7 +60,14 @@ export default function ComplaintTable({ complaints = [], onAssign, onStatusChan
             {/* Main Row */}
             <div 
               className="p-6 cursor-pointer hover:bg-slate-800/30 transition-colors"
-              onClick={() => setExpandedId(isExpanded ? null : item._id)}
+              onClick={() => {
+                const nextExpanded = isExpanded ? null : item._id;
+                setExpandedId(nextExpanded);
+
+                if (nextExpanded && onLoadActivity && !activityByComplaint[item._id]) {
+                  onLoadActivity(item._id);
+                }
+              }}
             >
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 {/* Left Section */}
@@ -97,7 +116,7 @@ export default function ComplaintTable({ complaints = [], onAssign, onStatusChan
                 {item.assignedTo && (
                   <div>
                     <p className="text-sm font-semibold text-slate-300 mb-2">Assigned To</p>
-                    <p className="text-slate-300 text-sm">👤 {item.assignedTo.name} ({item.assignedTo.role})</p>
+                    <p className="text-slate-300 text-sm">👤 {item.assignedTo.name} ({item.assignedTo.role || "staff"})</p>
                   </div>
                 )}
 
@@ -115,33 +134,72 @@ export default function ComplaintTable({ complaints = [], onAssign, onStatusChan
                   )}
                   <div className="bg-slate-800/50 p-3 rounded-lg">
                     <p className="text-slate-400">Submitted By</p>
-                    <p className="text-slate-300 font-semibold">{item.submittedBy.name}</p>
+                    <p className="text-slate-300 font-semibold">{item.submittedBy?.name || "You"}</p>
+                  </div>
+                </div>
+
+                {/* Activity Timeline */}
+                <div>
+                  <p className="text-sm font-semibold text-slate-300 mb-2">Status Timeline</p>
+                  <div className="space-y-2">
+                    {(activityByComplaint[item._id] || []).slice(0, 5).map((entry) => (
+                      <div key={entry._id} className="bg-slate-800/40 rounded-lg p-3 text-sm">
+                        <p className="text-slate-200 font-medium">{entry.action.replaceAll("_", " ")}</p>
+                        <p className="text-slate-400 text-xs">
+                          by {entry.actor?.name || "System"} • {new Date(entry.createdAt).toLocaleString()}
+                        </p>
+                        {entry.metadata?.status && (
+                          <p className="text-slate-300 text-xs mt-1">Status: {entry.metadata.status}</p>
+                        )}
+                      </div>
+                    ))}
+                    {activityByComplaint[item._id] && activityByComplaint[item._id].length === 0 && (
+                      <p className="text-slate-400 text-sm">No timeline events available yet.</p>
+                    )}
                   </div>
                 </div>
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-700/50">
-                  {role === "admin" && (
+                  {["admin", "hod", "director"].includes(role) && (
                     <div>
-                      <label className="text-sm font-semibold text-slate-300 block mb-2">Assign To Staff</label>
+                      <label className="text-sm font-semibold text-slate-300 block mb-2">Assign To Staff/Faculty</label>
                       <select
                         className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 text-white rounded-lg focus:bg-slate-700/80 focus:border-mint/50 transition-all"
                         onChange={(e) => onAssign(item._id, e.target.value)}
                         defaultValue=""
                       >
                         <option value="" disabled>
-                          Select staff member...
+                          Select assignee...
                         </option>
                         {users.map((user) => (
                           <option key={user._id} value={user._id}>
-                            {user.name}
+                            {user.name} ({user.role})
                           </option>
                         ))}
                       </select>
                     </div>
                   )}
 
-                  {(role === "admin" || role === "staff") && (
+                  {["admin", "hod", "director"].includes(role) && (
+                    <div>
+                      <label className="text-sm font-semibold text-slate-300 block mb-2">Set Responsibility Category</label>
+                      <select
+                        className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 text-white rounded-lg focus:bg-slate-700/80 focus:border-mint/50 transition-all"
+                        onChange={(e) => onCategoryChange(item._id, { responsibilityCategory: e.target.value })}
+                        value={item.responsibilityCategory || "other"}
+                      >
+                        <option value="hod">HOD</option>
+                        <option value="director">Director</option>
+                        <option value="technical_staff">Technical Staff</option>
+                        <option value="faculty">Faculty</option>
+                        <option value="staff">Staff</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {(role === "admin" || role === "hod" || role === "director" || role === "staff" || role === "faculty") && (
                     <div>
                       <label className="text-sm font-semibold text-slate-300 block mb-2">Update Status</label>
                       <select
@@ -152,10 +210,24 @@ export default function ComplaintTable({ complaints = [], onAssign, onStatusChan
                         <option value="" disabled>
                           Change status...
                         </option>
+                        <option value="pending_confirmation">Request Closure</option>
                         <option value="in_progress">In Progress</option>
                         <option value="resolved">Resolved</option>
                         <option value="rejected">Rejected</option>
                       </select>
+                    </div>
+                  )}
+
+                  {role === "student" && item.status === "pending_confirmation" && (
+                    <div>
+                      <label className="text-sm font-semibold text-slate-300 block mb-2">Confirm Resolution</label>
+                      <button
+                        type="button"
+                        onClick={() => onStatusChange(item._id, "resolved")}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-all"
+                      >
+                        Confirm & Close
+                      </button>
                     </div>
                   )}
                 </div>

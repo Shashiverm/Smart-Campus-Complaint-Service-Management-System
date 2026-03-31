@@ -5,6 +5,8 @@ export default function HomePage() {
     { label: "Student Login", role: "student", icon: "👨‍🎓" },
     { label: "Faculty Login", role: "faculty", icon: "👨‍🏫" },
     { label: "Staff Login", role: "staff", icon: "👨‍💼" },
+    { label: "HOD Login", role: "hod", icon: "🧑‍🏫" },
+    { label: "Director Login", role: "director", icon: "🧑‍💼" },
     { label: "Admin Login", role: "admin", icon: "👨‍💻" }
   ];
 
@@ -116,7 +118,7 @@ export default function HomePage() {
             <p className="text-xl text-slate-400">Everything you need for efficient complaint management</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, idx) => (
               <div key={idx} className="card p-6 hover:border-mint/60 group animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{feature.icon}</div>
