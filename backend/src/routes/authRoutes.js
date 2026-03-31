@@ -8,7 +8,14 @@ import { ROLES } from "../utils/constants.js";
 const router = Router();
 
 router.post("/login", loginValidators, validateRequest, loginUser);
-router.post("/register", protect, authorize(ROLES.ADMIN), registerValidators, validateRequest, registerUser);
+router.post(
+	"/register",
+	protect,
+	authorize(ROLES.ADMIN, ROLES.HOD, ROLES.DIRECTOR),
+	registerValidators,
+	validateRequest,
+	registerUser
+);
 router.get("/me", protect, me);
 
 export default router;

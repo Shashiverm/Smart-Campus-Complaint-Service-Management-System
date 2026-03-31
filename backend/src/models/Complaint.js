@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { COMPLAINT_PRIORITY, COMPLAINT_STATUS } from "../utils/constants.js";
+import { COMPLAINT_PRIORITY, COMPLAINT_STATUS, RESPONSIBILITY_CATEGORY } from "../utils/constants.js";
 
 const complaintSchema = new mongoose.Schema(
   {
@@ -15,8 +15,13 @@ const complaintSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      required: true,
+      required: false,
       trim: true
+    },
+    responsibilityCategory: {
+      type: String,
+      enum: Object.values(RESPONSIBILITY_CATEGORY),
+      default: RESPONSIBILITY_CATEGORY.OTHER
     },
     location: {
       type: String,

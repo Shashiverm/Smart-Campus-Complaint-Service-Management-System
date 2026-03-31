@@ -6,6 +6,6 @@ import { ROLES } from "../utils/constants.js";
 
 const router = Router();
 
-router.get("/", protect, authorize(ROLES.ADMIN), getUsers);
+router.get("/", protect, authorize(ROLES.ADMIN, ROLES.HOD, ROLES.DIRECTOR), getUsers);
 
 export default router;
