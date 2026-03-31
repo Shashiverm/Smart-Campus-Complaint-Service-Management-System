@@ -2,117 +2,192 @@ import Link from "next/link";
 
 export default function HomePage() {
   const roleLogins = [
-    { label: "Student Login", role: "student" },
-    { label: "Faculty Login", role: "faculty" },
-    { label: "Staff Login", role: "staff" },
-    { label: "Admin Login", role: "admin" }
+    { label: "Student Login", role: "student", icon: "👨‍🎓" },
+    { label: "Faculty Login", role: "faculty", icon: "👨‍🏫" },
+    { label: "Staff Login", role: "staff", icon: "👨‍💼" },
+    { label: "Admin Login", role: "admin", icon: "👨‍💻" }
   ];
 
   const features = [
-    "Role-based dashboards for Student, Faculty, Staff, and Admin",
-    "Real-time complaint tracking from submission to closure",
-    "Transparent assignment, response, and resolution workflow",
-    "Status visibility, activity history, and accountability for every ticket"
+    {
+      title: "Role-Based Dashboards",
+      description: "Customized interfaces for Student, Faculty, Staff, and Admin roles",
+      icon: "🎯"
+    },
+    {
+      title: "Real-Time Tracking",
+      description: "Monitor complaint status from submission to closure in real-time",
+      icon: "⚡"
+    },
+    {
+      title: "Transparent Workflow",
+      description: "Clear assignment, response, and resolution process for accountability",
+      icon: "📊"
+    },
+    {
+      title: "Full Visibility",
+      description: "Activity history and status visibility for every ticket",
+      icon: "👁️"
+    }
   ];
 
   const steps = [
     {
-      title: "1. Raise Complaint",
-      body: "Students, faculty, and staff can submit complaints with category, priority, and details."
+      number: "01",
+      title: "Raise Complaint",
+      body: "Students, faculty, and staff submit complaints with category, priority, and details."
     },
     {
-      title: "2. Assign Responsible Team",
-      body: "The system routes issues so the responsible person or team can handle them promptly."
+      number: "02",
+      title: "Assign Responsible Team",
+      body: "The system routes issues to the responsible person or team for prompt handling."
     },
     {
-      title: "3. Respond & Update",
-      body: "Assigned members provide responses, progress notes, and status updates in real time."
+      number: "03",
+      title: "Respond & Update",
+      body: "Assigned members provide real-time responses, progress notes, and status updates."
     },
     {
-      title: "4. Resolve & Close",
-      body: "Issues are resolved with clear closure records visible on each user dashboard."
+      number: "04",
+      title: "Resolve & Close",
+      body: "Issues are resolved with clear closure records visible on each dashboard."
     }
   ];
 
   return (
-    <main className="min-h-screen px-6 py-8 md:px-12 md:py-14">
-      <section className="max-w-6xl mx-auto card p-8 md:p-12">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <p className="uppercase tracking-[0.2em] text-sm text-slate-600 font-semibold">Smart Campus Platform</p>
-            <h1 className="mt-3 text-3xl md:text-5xl font-bold leading-tight text-slate-900">
-              Beautifully Managed Campus Complaints, from Request to Resolution
-            </h1>
-            <p className="mt-4 text-slate-700 text-lg">
-              A unified complaint and service management portal where students, faculty, and staff raise issues,
-              responsible teams respond, and administrators monitor full resolution progress.
-            </p>
-            <p className="mt-4 text-sm text-slate-600 bg-white/70 border border-slate-200 rounded-lg p-3">
-              Registration is controlled by Admin only. Students, faculty, and staff receive accounts from Admin and
-              can then login to their own dashboard.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              {roleLogins.map((item) => (
-                <Link
-                  key={item.role}
-                  href={`/login?role=${item.role}`}
-                  className="rounded-xl px-4 py-2.5 bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
+    <main className="min-h-screen bg-dark-navy text-white overflow-hidden">
+      {/* Navigation Bar */}
+      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-dark-navy/80 border-b border-slate-700/30">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-teal to-mint rounded-lg flex items-center justify-center font-bold text-dark-navy">
+              S
             </div>
+            <span className="font-bold text-xl">Smart Campus</span>
           </div>
+          <p className="text-sm text-slate-400">Complaint Management System</p>
+        </div>
+      </nav>
 
-          <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 md:p-7 shadow-sm">
-            <h2 className="text-xl font-semibold text-slate-900">How It Works</h2>
-            <div className="mt-4 grid gap-3">
-              {steps.map((step) => (
-                <article key={step.title} className="rounded-xl border border-slate-200 bg-white p-4">
-                  <h3 className="font-semibold text-slate-900">{step.title}</h3>
-                  <p className="text-sm text-slate-600 mt-1">{step.body}</p>
-                </article>
-              ))}
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+            {/* Left Content */}
+            <div className="animate-fade-in-up space-y-6">
+              <div className="inline-block px-4 py-2 bg-teal/20 border border-teal/40 rounded-full">
+                <span className="text-sm font-semibold text-mint">✨ Next-Gen Campus Platform</span>
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-mint to-teal bg-clip-text text-transparent">
+                Streamlined Complaint Management
+              </h1>
+              <p className="text-lg text-slate-300 leading-relaxed">
+                A unified complaint and service management portal where students, faculty, and staff raise issues, 
+                responsible teams respond, and administrators monitor full resolution progress in real-time.
+              </p>
+              <div className="flex gap-4 pt-4">
+                <a href="#login-section" className="px-8 py-3 bg-gradient-to-r from-teal to-mint text-dark-navy font-semibold rounded-lg hover:shadow-lg hover:shadow-teal/50 transform hover:-translate-y-1 transition-all">
+                  Get Started
+                </a>
+                <a href="#features" className="px-8 py-3 border border-mint/50 text-mint font-semibold rounded-lg hover:bg-mint/10 transition-all">
+                  Learn More
+                </a>
+              </div>
+            </div>
+
+            {/* Right Visual */}
+            <div className="animate-fade-in-down relative h-96">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal/20 to-mint/20 rounded-2xl blur-3xl"></div>
+              <div className="relative z-10 h-full bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl backdrop-blur-xl p-8 flex flex-col justify-center items-center hover:border-mint/40 transition-all">
+                <div className="text-6xl mb-4">📋</div>
+                <h3 className="text-2xl font-bold text-center mb-2">Smart Tracking</h3>
+                <p className="text-slate-400 text-center">Real-time updates and transparent workflow management</p>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <section className="mt-10 md:mt-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Core Features</h2>
-          <div className="mt-5 grid md:grid-cols-2 gap-4">
-            {features.map((feature) => (
-              <div key={feature} className="rounded-xl border border-slate-200 bg-white/75 p-4 text-slate-700">
-                {feature}
+      {/* Features Section */}
+      <section id="features" className="py-20 px-6 border-t border-slate-700/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Powerful Features</h2>
+            <p className="text-xl text-slate-400">Everything you need for efficient complaint management</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, idx) => (
+              <div key={idx} className="card p-6 hover:border-mint/60 group animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{feature.icon}</div>
+                <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
+                <p className="text-slate-400 text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
-        </section>
-
-        <section className="mt-10 md:mt-12 rounded-2xl border border-slate-200 bg-slate-900 text-white p-6 md:p-8">
-          <h2 className="text-2xl md:text-3xl font-bold">Complaint Responsibility & Resolution</h2>
-          <p className="mt-3 text-slate-200 max-w-3xl">
-            Students, faculty, and staff can raise complaints anytime. The responsible person reviews each complaint,
-            responds with updates, and marks it resolved after completion. Everyone can track progress from their
-            dashboard with clear status visibility.
-          </p>
-        </section>
+        </div>
       </section>
 
-      <footer className="max-w-6xl mx-auto mt-8 md:mt-10 card p-6 md:p-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <p className="text-slate-700 font-medium">Role Login Shortcuts</p>
-          <div className="flex flex-wrap gap-2">
-            {roleLogins.map((item) => (
+      {/* Process Steps */}
+      <section className="py-20 px-6 border-t border-slate-700/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">How It Works</h2>
+            <p className="text-xl text-slate-400">Simple 4-step complaint resolution process</p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            {steps.map((step, idx) => (
+              <div key={idx} className="relative animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
+                {idx < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-12 left-[60%] w-[40%] h-0.5 bg-gradient-to-r from-teal to-transparent"></div>
+                )}
+                <div className="card p-6 relative z-10">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal to-mint flex items-center justify-center font-bold text-dark-navy mb-4 text-lg">
+                    {step.number}
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">{step.title}</h3>
+                  <p className="text-slate-400 text-sm">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Login Section */}
+      <section id="login-section" className="py-20 px-6 border-t border-slate-700/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Access Your Account</h2>
+            <p className="text-xl text-slate-400">Choose your role to get started</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {roleLogins.map((roleLogin, idx) => (
               <Link
-                key={`footer-${item.role}`}
-                href={`/login?role=${item.role}`}
-                className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 hover:bg-white transition-colors"
+                key={roleLogin.role}
+                href={`/login?role=${roleLogin.role}`}
+                className="group animate-fade-in-up"
+                style={{ animationDelay: `${idx * 100}ms` }}
               >
-                {item.label}
+                <div className="card p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105">
+                  <div className="text-5xl mb-4 group-hover:scale-125 transition-transform">{roleLogin.icon}</div>
+                  <h3 className="font-bold text-xl mb-2 group-hover:text-mint transition-colors">{roleLogin.label}</h3>
+                  <p className="text-slate-400 text-sm">Sign in with your credentials</p>
+                  <div className="mt-4 text-mint font-semibold group-hover:translate-x-2 transition-transform inline-block">
+                    →
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 px-6 border-t border-slate-700/30 text-center text-slate-400">
+        <p>© 2026 Smart Campus Complaint Management System. All rights reserved.</p>
       </footer>
     </main>
   );

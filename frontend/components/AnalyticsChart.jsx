@@ -25,7 +25,19 @@ export default function AnalyticsChart({ analytics }) {
           analytics?.summary?.resolved || 0,
           analytics?.summary?.rejected || 0
         ],
-        backgroundColor: ["#D94E41", "#F59E0B", "#0A7075", "#64748B"]
+        backgroundColor: [
+          "rgba(239, 68, 68, 0.7)",    // Red for Open
+          "rgba(245, 158, 11, 0.7)",   // Orange for In Progress
+          "rgba(16, 185, 129, 0.7)",   // Green for Resolved
+          "rgba(100, 116, 139, 0.7)"   // Gray for Rejected
+        ],
+        borderColor: [
+          "rgba(239, 68, 68, 1)",
+          "rgba(245, 158, 11, 1)",
+          "rgba(16, 185, 129, 1)",
+          "rgba(100, 116, 139, 1)"
+        ],
+        borderWidth: 2
       }
     ]
   };
@@ -34,20 +46,101 @@ export default function AnalyticsChart({ analytics }) {
     labels: (analytics?.byDepartment || []).map((item) => item._id),
     datasets: [
       {
-        label: "Complaints by Department",
+        label: "Complaints",
         data: (analytics?.byDepartment || []).map((item) => item.value),
-        backgroundColor: "#6BA3BE"
+        backgroundColor: "rgba(10, 112, 117, 0.7)",
+        borderColor: "rgba(107, 163, 190, 1)",
+        borderWidth: 2,
+        borderRadius: 8
       }
     ]
   };
 
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: "#cbd5e1",
+          font: {
+            family: "'Poppins', sans-serif",
+            size: 12,
+            weight: "600"
+          },
+          padding: 15
+        }
+      },
+      tooltip: {
+        backgroundColor: "rgba(30, 41, 59, 0.9)",
+        borderColor: "rgba(107, 163, 190, 0.5)",
+        borderWidth: 1,
+        titleColor: "#f8fafc",
+        bodyColor: "#cbd5e1",
+        cornerRadius: 8,
+        padding: 12,
+        titleFont: {
+          size: 14,
+          weight: "bold"
+        },
+        bodyFont: {
+          size: 13
+        }
+      }
+    }
+  };
+
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="card p-4">
-        <Doughnut data={pieData} />
+    <div className="grid md:grid-cols-2 gap-6 animate-fade-in-up">
+      {/* Status Distribution */}
+      <div className="card p-8">
+        <h3 className="text-lg font-bold mb-6">Status Distribution</h3>
+        <div className="relative h-80">
+          <Doughnut data={pieData} options={chartOptions} />
+        </div>
+        <div className="mt-6 pt-6 border-t border-slate-700/50 space-y-3">
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+              <span className="text-slate-300">Open</span>
+            </span>
+            <span className="font-bold text-red-400">{analytics?.summary?.open || 0}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <span className="text-slate-300">In Progress</span>
+            </span>
+            <span className="font-bold text-yellow-400">{analytics?.summary?.inProgress || 0}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-slate-300">Resolved</span>
+            </span>
+            <span className="font-bold text-green-400">{analytics?.summary?.resolved || 0}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+              <span className="text-slate-300">Rejected</span>
+            </span>
+            <span className="font-bold text-gray-400">{analytics?.summary?.rejected || 0}</span>
+          </div>
+        </div>
       </div>
-      <div className="card p-4">
-        <Bar data={barData} />
+
+      {/* Department Breakdown */}
+      <div className="card p-8">
+        <h3 className="text-lg font-bold mb-6">Complaints by Department</h3>
+        <div className="relative h-80">
+          <Bar data={barData} options={chartOptions} />
+        </div>
+        <div className="mt-6 pt-6 border-t border-slate-700/50">
+          <p className="text-xs text-slate-400">
+            Total complaints across all departments: <span className="font-bold text-mint">{(analytics?.byDepartment || []).reduce((sum, item) => sum + item.value, 0)}</span>
+          </p>
+        </div>
       </div>
     </div>
   );

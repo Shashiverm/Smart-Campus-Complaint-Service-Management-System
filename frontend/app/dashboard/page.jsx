@@ -87,29 +87,103 @@ export default function DashboardPage() {
     router.push("/login");
   };
 
+  const getStatusColor = (status) => {
+    switch(status) {
+      case "open": return "text-red-400";
+      case "in_progress": return "text-yellow-400";
+      case "resolved": return "text-green-400";
+      case "rejected": return "text-gray-400";
+      default: return "text-slate-400";
+    }
+  };
+
+  const getComplaintStats = () => {
+    const stats = {
+      total: complaints.length,
+      open: complaints.filter(c => c.status === "open").length,
+      inProgress: complaints.filter(c => c.status === "in_progress").length,
+      resolved: complaints.filter(c => c.status === "resolved").length
+    };
+    return stats;
+  };
+
+  const stats = getComplaintStats();
+
   return (
-    <main className="min-h-screen p-4 md:p-8 space-y-6">
-      <section className="card p-5 flex items-center justify-between">
+    <main className="min-h-screen bg-dark-navy text-white p-4 md:p-8 space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in-down">
         <div>
-          <h1 className="text-2xl font-bold">Smart Campus Dashboard</h1>
-          <p className="text-slate-600">Logged in as {user?.name || "..."}</p>
+          <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
+          <p className="text-slate-400 flex items-center gap-2">
+            <span className="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
+            Welcome, {user?.name || "User"}
+          </p>
         </div>
-        <button className="bg-ember text-white px-4 py-2 rounded-xl" onClick={logout}>
+        <button 
+          onClick={logout}
+          className="px-6 py-2 bg-gradient-to-r from-ember to-red-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-ember/50 transform hover:-translate-y-1 transition-all"
+        >
           Logout
         </button>
-      </section>
+      </div>
 
-      {role === "student" && <ComplaintForm onSubmit={handleCreateComplaint} />}
+      {/* Stats Section */}
+      {(role === "admin" || role !== "student") && (
+        <div className="grid md:grid-cols-4 gap-4">
+          <div className="card p-6 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-l-4 border-teal animate-fade-in-up">
+            <p className="text-slate-400 text-sm">Total Complaints</p>
+            <p className="text-3xl font-bold mt-2">{stats.total}</p>
+          </div>
+          <div className="card p-6 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-l-4 border-red-500 animate-fade-in-up" style={{animationDelay: "50ms"}}>
+            <p className="text-slate-400 text-sm">Open</p>
+            <p className="text-3xl font-bold mt-2 text-red-400">{stats.open}</p>
+          </div>
+          <div className="card p-6 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-l-4 border-yellow-500 animate-fade-in-up" style={{animationDelay: "100ms"}}>
+            <p className="text-slate-400 text-sm">In Progress</p>
+            <p className="text-3xl font-bold mt-2 text-yellow-400">{stats.inProgress}</p>
+          </div>
+          <div className="card p-6 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-l-4 border-green-500 animate-fade-in-up" style={{animationDelay: "150ms"}}>
+            <p className="text-slate-400 text-sm">Resolved</p>
+            <p className="text-3xl font-bold mt-2 text-green-400">{stats.resolved}</p>
+          </div>
+        </div>
+      )}
 
-      <ComplaintTable
-        complaints={complaints}
-        onAssign={handleAssign}
-        onStatusChange={handleStatusChange}
-        users={staffUsers}
-        role={role}
-      />
+      {/* Complaint Form Section */}
+      {role === "student" && (
+        <div className="animate-fade-in-up">
+          <ComplaintForm onSubmit={handleCreateComplaint} />
+        </div>
+      )}
 
-      {role === "admin" && analytics && <AnalyticsChart analytics={analytics} />}
+      {/* Complaints Table Section */}
+      <div className="animate-fade-in-up">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold">
+            {role === "student" ? "My Complaints" : "All Complaints"}
+          </h2>
+          <p className="text-slate-400 text-sm mt-1">Manage and track complaint status</p>
+        </div>
+        <ComplaintTable
+          complaints={complaints}
+          onAssign={handleAssign}
+          onStatusChange={handleStatusChange}
+          users={staffUsers}
+          role={role}
+        />
+      </div>
+
+      {/* Analytics Section */}
+      {role === "admin" && analytics && (
+        <div className="animate-fade-in-up">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold">Analytics & Insights</h2>
+            <p className="text-slate-400 text-sm mt-1">Complaint statistics and departmental trends</p>
+          </div>
+          <AnalyticsChart analytics={analytics} />
+        </div>
+      )}
     </main>
   );
 }
