@@ -6,9 +6,19 @@ const initialForm = {
   collegeId: "",
   name: "",
   email: "",
+  personalEmail: "",
+  phone: "",
   password: "",
   role: "student",
-  department: ""
+  department: "",
+  branch: "",
+  className: "",
+  rollNumber: "",
+  registrationNumber: "",
+  batch: "",
+  facultyId: "",
+  roleInDepartment: "",
+  staffId: ""
 };
 
 export default function UserManagementPanel({ users = [], onCreateUser }) {
@@ -70,6 +80,14 @@ export default function UserManagementPanel({ users = [], onCreateUser }) {
           required
         />
         <input
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Phone"
+          className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+          required
+        />
+        <input
           name="password"
           type="password"
           value={formData.password}
@@ -99,7 +117,97 @@ export default function UserManagementPanel({ users = [], onCreateUser }) {
           onChange={handleChange}
           placeholder="Department"
           className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+          required
         />
+
+        {(formData.role === "student") && (
+          <>
+            <input
+              name="branch"
+              value={formData.branch}
+              onChange={handleChange}
+              placeholder="Branch"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+            <input
+              name="className"
+              value={formData.className}
+              onChange={handleChange}
+              placeholder="Class"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+            <input
+              name="rollNumber"
+              value={formData.rollNumber}
+              onChange={handleChange}
+              placeholder="Roll Number"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+            <input
+              name="registrationNumber"
+              value={formData.registrationNumber}
+              onChange={handleChange}
+              placeholder="Registration Number"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+            <input
+              name="batch"
+              value={formData.batch}
+              onChange={handleChange}
+              placeholder="Batch"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+          </>
+        )}
+
+        {(formData.role === "faculty" || formData.role === "hod" || formData.role === "director") && (
+          <>
+            <input
+              name="personalEmail"
+              type="email"
+              value={formData.personalEmail}
+              onChange={handleChange}
+              placeholder="Personal Email"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required={formData.role === "faculty"}
+            />
+            <input
+              name="facultyId"
+              value={formData.facultyId}
+              onChange={handleChange}
+              placeholder="Faculty ID"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+          </>
+        )}
+
+        {(formData.role === "staff") && (
+          <>
+            <input
+              name="roleInDepartment"
+              value={formData.roleInDepartment}
+              onChange={handleChange}
+              placeholder="Role in Department"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+            <input
+              name="staffId"
+              value={formData.staffId}
+              onChange={handleChange}
+              placeholder="Staff ID"
+              className="px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg"
+              required
+            />
+          </>
+        )}
+
         <button
           type="submit"
           disabled={isSubmitting}

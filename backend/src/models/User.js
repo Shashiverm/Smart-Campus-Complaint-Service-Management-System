@@ -38,6 +38,50 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    phone: {
+      type: String,
+      trim: true
+    },
+    branch: {
+      type: String,
+      trim: true
+    },
+    className: {
+      type: String,
+      trim: true
+    },
+    rollNumber: {
+      type: String,
+      trim: true
+    },
+    registrationNumber: {
+      type: String,
+      trim: true,
+      uppercase: true
+    },
+    batch: {
+      type: String,
+      trim: true
+    },
+    personalEmail: {
+      type: String,
+      lowercase: true,
+      trim: true
+    },
+    facultyId: {
+      type: String,
+      trim: true,
+      uppercase: true
+    },
+    roleInDepartment: {
+      type: String,
+      trim: true
+    },
+    staffId: {
+      type: String,
+      trim: true,
+      uppercase: true
+    },
     isActive: {
       type: Boolean,
       default: true

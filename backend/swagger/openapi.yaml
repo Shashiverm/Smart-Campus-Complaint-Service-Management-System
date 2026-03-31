@@ -31,6 +31,7 @@ paths:
   /api/v1/auth/register:
     post:
       summary: Register user (Admin only - student/faculty/staff/hod/director/admin)
+      description: Role-based required fields are enforced for student, faculty, and staff registrations.
       security:
         - bearerAuth: []
       responses:

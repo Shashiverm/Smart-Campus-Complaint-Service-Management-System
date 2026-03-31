@@ -9,23 +9,105 @@ const signToken = (user) =>
   });
 
 export const registerValidators = [
-  body("collegeId").trim().notEmpty(),
   body("name").trim().notEmpty(),
-  body("email").isEmail(),
+  body("email").optional().isEmail(),
+  body("personalEmail").optional().isEmail(),
   body("password").isLength({ min: 8 }),
   body("role").isIn(Object.values(ROLES)),
-  body("department").optional().isString()
+  body("department").optional().isString(),
+  body("phone").optional().isString(),
+  body("branch").optional().isString(),
+  body("className").optional().isString(),
+  body("rollNumber").optional().isString(),
+  body("registrationNumber").optional().isString(),
+  body("batch").optional().isString(),
+  body("facultyId").optional().isString(),
+  body("roleInDepartment").optional().isString(),
+  body("staffId").optional().isString(),
+  body().custom((value) => {
+    const requiredByRole = {
+      [ROLES.STUDENT]: [
+        "name",
+        "email",
+        "phone",
+        "department",
+        "branch",
+        "className",
+        "rollNumber",
+        "registrationNumber",
+        "batch"
+      ],
+      [ROLES.FACULTY]: ["name", "email", "personalEmail", "phone", "department", "facultyId"],
+      [ROLES.STAFF]: ["name", "email", "department", "phone", "roleInDepartment", "staffId"],
+      [ROLES.HOD]: ["name", "email", "department", "phone", "facultyId"],
+      [ROLES.DIRECTOR]: ["name", "email", "department", "phone", "facultyId"],
+      [ROLES.ADMIN]: ["name", "email"]
+    };
+
+    const requiredFields = requiredByRole[value.role] || ["name", "email"];
+    const missing = requiredFields.filter((field) => !value[field]);
+
+    if (missing.length > 0) {
+      throw new Error(`Missing required fields for ${value.role}: ${missing.join(", ")}`);
+    }
+
+    return true;
+  })
 ];
 
 export const registerUser = async (req, res) => {
-  const { collegeId, name, email, password, role, department } = req.body;
+  const {
+    collegeId,
+    name,
+    email,
+    password,
+    role,
+    department,
+    phone,
+    branch,
+    className,
+    rollNumber,
+    registrationNumber,
+    batch,
+    personalEmail,
+    facultyId,
+    roleInDepartment,
+    staffId
+  } = req.body;
 
-  const exists = await User.findOne({ $or: [{ email }, { collegeId }] });
+  const identityCollegeId = collegeId || registrationNumber || facultyId || staffId;
+
+  const exists = await User.findOne({
+    $or: [
+      { email },
+      ...(identityCollegeId ? [{ collegeId: identityCollegeId }] : []),
+      ...(registrationNumber ? [{ registrationNumber }] : []),
+      ...(facultyId ? [{ facultyId }] : []),
+      ...(staffId ? [{ staffId }] : [])
+    ]
+  });
   if (exists) {
     return res.status(409).json({ message: "User already exists" });
   }
 
-  const user = await User.create({ collegeId, name, email, password, role, department });
+  const user = await User.create({
+    collegeId: identityCollegeId,
+    name,
+    email,
+    password,
+    role,
+    department,
+    phone,
+    branch,
+    className,
+    rollNumber,
+    registrationNumber,
+    batch,
+    personalEmail,
+    facultyId,
+    roleInDepartment,
+    staffId
+  });
 
   return res.status(201).json({
     message: "User created successfully",
@@ -35,7 +117,17 @@ export const registerUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      department: user.department
+      department: user.department,
+      phone: user.phone,
+      branch: user.branch,
+      className: user.className,
+      rollNumber: user.rollNumber,
+      registrationNumber: user.registrationNumber,
+      batch: user.batch,
+      personalEmail: user.personalEmail,
+      facultyId: user.facultyId,
+      roleInDepartment: user.roleInDepartment,
+      staffId: user.staffId
     }
   });
 };
