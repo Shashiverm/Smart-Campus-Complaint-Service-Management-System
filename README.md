@@ -276,11 +276,13 @@ Endpoints via Nginx:
 - `POST /api/v1/auth/login`
 - `POST /api/v1/auth/register` (Admin only)
 - `GET /api/v1/auth/me`
-- `POST /api/v1/complaints` (Student)
-- `GET /api/v1/complaints/my` (Student)
-- `GET /api/v1/complaints` (Admin/Staff)
-- `PATCH /api/v1/complaints/:id/assign` (Admin)
-- `PATCH /api/v1/complaints/:id/status` (Admin/Assigned Staff)
+- `GET /api/v1/users` (Admin only)
+- `POST /api/v1/complaints` (Student/Faculty/Staff)
+- `GET /api/v1/complaints/my` (Student/Faculty/Staff)
+- `GET /api/v1/complaints` (Admin gets all, Staff/Faculty get assigned)
+- `PATCH /api/v1/complaints/:id/assign` (Admin assigns to Staff/Faculty)
+- `PATCH /api/v1/complaints/:id/status` (Admin/Assigned Staff/Assigned Faculty)
+- `GET /api/v1/complaints/:id/activity` (Owner/Assignee/Admin)
 - `GET /api/v1/complaints/analytics` (Admin)
 
 ## Security Notes
