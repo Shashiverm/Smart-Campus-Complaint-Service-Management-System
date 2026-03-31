@@ -19,11 +19,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
 
-  // Better error handling
-  onError: (err, req, res) => {
-    res.status(500).end('Internal server error');
-  },
-
   // Environment variables
   env: {
     // These are only available server-side
