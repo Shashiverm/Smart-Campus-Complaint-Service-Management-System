@@ -401,5 +401,5 @@ curl -X POST https://your-backend.railway.app/api/v1/auth/login \
 
 ---
 
-**Last Updated:** March 2024  
+**Last Updated:** March 2026  
 **Version:** 1.0

@@ -368,7 +368,7 @@ cd frontend && npm run dev # Terminal 2
 
 ---
 
-**Last Updated**: March 2024  
+**Last Updated**: March 2026  
 **Version**: 1.0
 
 ---
