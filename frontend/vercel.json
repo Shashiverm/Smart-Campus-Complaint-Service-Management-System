@@ -1,5 +1,3 @@
-# Vercel Deployment Configuration for Frontend
-# This configuration is automatically used by Vercel
 
 {
   "buildCommand": "npm run build",
