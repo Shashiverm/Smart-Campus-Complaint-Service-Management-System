@@ -30,27 +30,115 @@ paths:
           description: Login success
   /api/v1/auth/register:
     post:
-      summary: Register user (Admin only)
+      summary: Register user (Admin only - student/faculty/staff/hod/director/admin)
       security:
         - bearerAuth: []
       responses:
         '201':
           description: User created
+  /api/v1/users:
+    get:
+      summary: List users (Admin/HOD/Director)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Users list
   /api/v1/complaints:
     post:
-      summary: Create complaint (Student)
+      summary: Create complaint (Student/Faculty/Staff)
       security:
         - bearerAuth: []
       responses:
         '201':
           description: Complaint created
     get:
-      summary: List complaints (Admin/Staff)
+      summary: List complaints (Admin gets all, Staff/Faculty get assigned)
       security:
         - bearerAuth: []
       responses:
         '200':
           description: Complaints list
+  /api/v1/complaints/my:
+    get:
+      summary: List current user's submitted complaints
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User complaints
+  /api/v1/complaints/{id}/assign:
+    patch:
+      summary: Assign complaint to staff/faculty (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Complaint assigned
+  /api/v1/complaints/{id}/status:
+    patch:
+      summary: Update complaint status (Admin/HOD/Director or assigned Staff/Faculty; requester confirms closure)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Complaint status updated
+  /api/v1/complaints/{id}/activity:
+    get:
+      summary: Complaint activity timeline (owner/assignee/admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Activity timeline
+  /api/v1/complaints/analytics:
+    get:
+      summary: Complaint analytics summary (Admin/HOD/Director)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Analytics payload
+  /api/v1/complaints/{id}/category:
+    patch:
+      summary: Update complaint routing category (Admin/HOD/Director)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Complaint category updated
+  /api/v1/complaints/report/download:
+    get:
+      summary: Download complaint report as CSV (Admin/HOD/Director)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: CSV report
 components:
   securitySchemes:
     bearerAuth:
