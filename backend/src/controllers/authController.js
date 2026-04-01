@@ -133,15 +133,35 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginValidators = [
-  body("email").isEmail(),
+  body("identifier").optional().isString(),
+  body("email").optional().isEmail(),
   body("password").notEmpty(),
-  body("role").optional().isIn(Object.values(ROLES))
+  body("role").optional().isIn(Object.values(ROLES)),
+  body().custom((value) => {
+    if (!value.identifier && !value.email) {
+      throw new Error("identifier or email is required");
+    }
+
+    return true;
+  })
 ];
 
 export const loginUser = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { identifier, email, password, role } = req.body;
 
-  const user = await User.findOne({ email }).select("+password");
+  const loginId = (identifier || email || "").trim();
+  const normalizedEmail = loginId.toLowerCase();
+  const normalizedId = loginId.toUpperCase();
+
+  const user = await User.findOne({
+    $or: [
+      { email: normalizedEmail },
+      { collegeId: normalizedId },
+      { registrationNumber: normalizedId },
+      { facultyId: normalizedId },
+      { staffId: normalizedId }
+    ]
+  }).select("+password");
   if (!user || !(await user.comparePassword(password))) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
