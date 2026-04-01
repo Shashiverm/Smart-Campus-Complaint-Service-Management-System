@@ -37,10 +37,23 @@ export default function UserManagementPanel({ users = [], onCreateUser }) {
     setIsSubmitting(true);
 
     try {
-      await onCreateUser(formData);
+      const payload = Object.fromEntries(
+        Object.entries(formData).filter(([, value]) => value !== "")
+      );
+
+      await onCreateUser(payload);
       setFormData(initialForm);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to create user");
+      const errors = requestError.response?.data?.errors;
+      if (Array.isArray(errors) && errors.length > 0) {
+        const message = errors
+          .map((item) => item.msg)
+          .filter(Boolean)
+          .join(", ");
+        setError(message || requestError.response?.data?.message || "Failed to create user");
+      } else {
+        setError(requestError.response?.data?.message || "Failed to create user");
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -11,7 +11,7 @@ const signToken = (user) =>
 export const registerValidators = [
   body("name").trim().notEmpty(),
   body("email").optional().isEmail(),
-  body("personalEmail").optional().isEmail(),
+  body("personalEmail").optional({ checkFalsy: true }).isEmail(),
   body("password").isLength({ min: 8 }),
   body("role").isIn(Object.values(ROLES)),
   body("department").optional().isString(),
