@@ -7,7 +7,7 @@ import api from "../../../lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -44,10 +44,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const payload = { email, password };
-      if (role && roleTitleMap[role]) {
-        payload.role = role;
-      }
+      const payload = { identifier, password, role };
 
       const { data } = await api.post("/auth/login", payload);
       localStorage.setItem("token", data.token);
@@ -117,18 +114,38 @@ export default function LoginPage() {
                 <p className="text-4xl mb-3">{roleEmoji}</p>
                 <h2 className="text-3xl font-bold mb-2">{loginTitle}</h2>
                 <p className="text-sm text-slate-400">
-                  Accounts are created by Admin only
+                  Select your role and sign in
                 </p>
               </div>
 
-              {/* Email Field */}
+              {/* Role Selector */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-300">Email Address</label>
+                <label className="text-sm font-semibold text-slate-300">User Type</label>
+                <select
+                  value={role}
+                  onChange={(event) => setRole(event.target.value)}
+                  className="w-full px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg focus:bg-slate-700/50 focus:border-mint/50 focus:ring-2 focus:ring-mint/20 transition-all"
+                  required
+                  disabled={isLoading}
+                >
+                  <option value="" disabled>Select your role</option>
+                  <option value="student">Student</option>
+                  <option value="faculty">Faculty</option>
+                  <option value="staff">Staff</option>
+                  <option value="hod">HOD</option>
+                  <option value="director">Director</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              {/* Identifier Field */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-300">College Email or ID</label>
                 <input
-                  type="email"
-                  placeholder="your.email@campus.edu"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  placeholder="college email, reg no, faculty id, or staff id"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   className="w-full px-4 py-3 bg-slate-700/30 border border-slate-600/50 text-white rounded-lg focus:bg-slate-700/50 focus:border-mint/50 focus:ring-2 focus:ring-mint/20 transition-all"
                   required
                   disabled={isLoading}
