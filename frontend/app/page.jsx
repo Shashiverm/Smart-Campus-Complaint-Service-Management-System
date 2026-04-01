@@ -63,52 +63,76 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-32 px-6">
+      <section className="relative pt-10 md:pt-16 pb-20 md:pb-24 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 md:gap-10 items-center">
             {/* Left Content */}
-            <div className="animate-fade-in-up space-y-6">
-              <div className="inline-block px-4 py-2 bg-teal/20 border border-teal/40 rounded-full">
+            <div className="animate-fade-in-up space-y-5 md:space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal/15 border border-teal/40 rounded-full">
                 <span className="text-sm font-semibold text-mint">✨ Next-Gen Campus Platform</span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-mint to-teal bg-clip-text text-transparent">
-                Streamlined Complaint Management
+
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] text-white tracking-tight">
+                Resolve Campus Issues
+                <span className="block bg-gradient-to-r from-mint to-teal bg-clip-text text-transparent">
+                  Faster, Clearer, Better
+                </span>
               </h1>
-              <p className="text-lg text-slate-300 leading-relaxed">
-                A unified complaint and service management portal where students, faculty, and staff raise issues, 
-                responsible teams respond, and administrators monitor full resolution progress in real-time.
+
+              <p className="text-base md:text-lg text-slate-300 leading-relaxed max-w-2xl">
+                A unified complaint and service platform where students, faculty, and staff raise issues,
+                responsible teams act quickly, and administrators monitor complete resolution in real-time.
               </p>
-              <div className="grid grid-cols-3 gap-3 pt-2">
-                <div className="card p-3 text-center">
-                  <p className="text-xl font-bold text-mint">24/7</p>
-                  <p className="text-xs text-slate-400">Issue Tracking</p>
+
+              <div className="grid grid-cols-3 gap-2 md:gap-3 max-w-xl">
+                <div className="card p-3 md:p-4 text-center">
+                  <p className="text-lg md:text-xl font-bold text-mint">24/7</p>
+                  <p className="text-[11px] md:text-xs text-slate-400">Issue Tracking</p>
                 </div>
-                <div className="card p-3 text-center">
-                  <p className="text-xl font-bold text-mint">Live</p>
-                  <p className="text-xs text-slate-400">Status Updates</p>
+                <div className="card p-3 md:p-4 text-center">
+                  <p className="text-lg md:text-xl font-bold text-mint">Live</p>
+                  <p className="text-[11px] md:text-xs text-slate-400">Status Updates</p>
                 </div>
-                <div className="card p-3 text-center">
-                  <p className="text-xl font-bold text-mint">Secure</p>
-                  <p className="text-xs text-slate-400">Role Access</p>
+                <div className="card p-3 md:p-4 text-center">
+                  <p className="text-lg md:text-xl font-bold text-mint">Secure</p>
+                  <p className="text-[11px] md:text-xs text-slate-400">Role Access</p>
                 </div>
               </div>
-              <div className="flex gap-4 pt-4">
-                <a href="#login-section" className="px-8 py-3 bg-gradient-to-r from-teal to-mint text-dark-navy font-semibold rounded-lg hover:shadow-lg hover:shadow-teal/50 transform hover:-translate-y-1 transition-all">
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <a href="#login-section" className="px-6 md:px-8 py-3 text-center bg-gradient-to-r from-teal to-mint text-dark-navy font-semibold rounded-lg hover:shadow-lg hover:shadow-teal/50 transform hover:-translate-y-1 transition-all">
                   Get Started
                 </a>
-                <a href="#features" className="px-8 py-3 border border-mint/50 text-mint font-semibold rounded-lg hover:bg-mint/10 transition-all">
+                <a href="#features" className="px-6 md:px-8 py-3 text-center border border-mint/50 text-mint font-semibold rounded-lg hover:bg-mint/10 transition-all">
                   Learn More
                 </a>
               </div>
             </div>
 
             {/* Right Visual */}
-            <div className="animate-fade-in-down relative h-96">
+            <div className="animate-fade-in-down relative">
               <div className="absolute inset-0 bg-gradient-to-r from-teal/20 to-mint/20 rounded-2xl blur-3xl"></div>
-              <div className="relative z-10 h-full bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl backdrop-blur-xl p-8 flex flex-col justify-center items-center hover:border-mint/40 transition-all">
-                <div className="text-6xl mb-4">📋</div>
-                <h3 className="text-2xl font-bold text-center mb-2">Smart Tracking</h3>
-                <p className="text-slate-400 text-center">Real-time updates and transparent workflow management</p>
+              <div className="relative z-10 card p-6 md:p-8 lg:p-10 min-h-[280px] md:min-h-[340px] flex flex-col justify-between">
+                <div className="flex items-start justify-between">
+                  <p className="text-xs uppercase tracking-[0.2em] text-mint">Live Operations</p>
+                  <span className="text-3xl md:text-4xl">📋</span>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-2">Smart Tracking</h3>
+                  <p className="text-slate-300">Real-time updates, clear accountability, and transparent issue lifecycle tracking.</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-700/50">
+                  <div>
+                    <p className="text-xs text-slate-400">Response Visibility</p>
+                    <p className="text-sm font-semibold text-white">End-to-End Timeline</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400">Management</p>
+                    <p className="text-sm font-semibold text-white">Role-Based Control</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
