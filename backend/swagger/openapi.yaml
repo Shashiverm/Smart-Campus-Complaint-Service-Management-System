@@ -21,9 +21,14 @@ paths:
             schema:
               type: object
               properties:
+                identifier:
+                  type: string
+                  description: College email or institutional ID (collegeId/registrationNumber/facultyId/staffId)
                 email:
                   type: string
                 password:
+                  type: string
+                role:
                   type: string
       responses:
         '200':
