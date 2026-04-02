@@ -38,18 +38,26 @@ if (!redisUrl) {
 export const notificationQueue = connection ? new Queue("notification-queue", { connection }) : null;
 
 export const enqueueNotification = async (payload) => {
-  if (!notificationQueue) {
-    await sendMail(payload);
-    return;
+  if (notificationQueue) {
+    try {
+      await notificationQueue.add("send-email", payload, {
+        attempts: 3,
+        backoff: {
+          type: "exponential",
+          delay: 1500
+        }
+      });
+      return;
+    } catch (error) {
+      console.error("Failed to queue notification email:", error.message);
+    }
   }
 
-  await notificationQueue.add("send-email", payload, {
-    attempts: 3,
-    backoff: {
-      type: "exponential",
-      delay: 1500
-    }
-  });
+  try {
+    await sendMail(payload);
+  } catch (error) {
+    console.error("Failed to send notification email:", error.message);
+  }
 };
 
 export const startNotificationWorker = () => {
