@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import ComplaintForm from "../../components/ComplaintForm";
 import ComplaintTable from "../../components/ComplaintTable";
@@ -8,6 +8,12 @@ import AnalyticsChart from "../../components/AnalyticsChart";
 import UserManagementPanel from "../../components/UserManagementPanel";
 import api from "../../lib/api";
 import { getSocket } from "../../lib/socket";
+import {
+  getBrowserNotificationPreference,
+  requestBrowserNotificationPermission,
+  setBrowserNotificationPreference,
+  showBrowserNotification
+} from "../../lib/browserNotifications";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -17,9 +23,15 @@ export default function DashboardPage() {
   const [allUsers, setAllUsers] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [activityByComplaint, setActivityByComplaint] = useState({});
+  const [browserNotificationState, setBrowserNotificationState] = useState("loading");
+  const browserNotificationStateRef = useRef("loading");
 
   const role = useMemo(() => user?.role, [user]);
   const elevatedRoles = useMemo(() => ["admin", "hod", "director"], []);
+
+  useEffect(() => {
+    browserNotificationStateRef.current = browserNotificationState;
+  }, [browserNotificationState]);
 
   const loadComplaints = async (currentRole) => {
     const endpoint = currentRole === "student" ? "/complaints/my" : "/complaints";
@@ -57,6 +69,23 @@ export default function DashboardPage() {
     const parsed = JSON.parse(raw);
     setUser(parsed);
 
+    const storedPreference = getBrowserNotificationPreference();
+    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
+      setBrowserNotificationPreference("enabled");
+      browserNotificationStateRef.current = "enabled";
+      setBrowserNotificationState("enabled");
+    } else if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "denied") {
+      setBrowserNotificationPreference("disabled");
+      browserNotificationStateRef.current = "disabled";
+      setBrowserNotificationState("disabled");
+    } else if (storedPreference) {
+      browserNotificationStateRef.current = storedPreference;
+      setBrowserNotificationState(storedPreference);
+    } else {
+      browserNotificationStateRef.current = "prompt";
+      setBrowserNotificationState("prompt");
+    }
+
     loadComplaints(parsed.role).catch(() => {});
     if (elevatedRoles.includes(parsed.role)) {
       loadUsers().catch(() => {});
@@ -67,8 +96,23 @@ export default function DashboardPage() {
     socket.connect();
     socket.emit("join:user", parsed.id);
     socket.emit("join:role", parsed.role);
-    socket.on("complaint:update", () => loadComplaints(parsed.role));
-    socket.on("complaint:new", () => loadComplaints(parsed.role));
+    const handleComplaintEvent = (eventType, complaint) => {
+      loadComplaints(parsed.role).catch(() => {});
+
+      if (browserNotificationStateRef.current !== "enabled") {
+        return;
+      }
+
+      const title = eventType === "complaint:new" ? "New complaint received" : "Complaint updated";
+      const body = complaint?.title
+        ? `${complaint.title}${complaint.status ? ` - ${complaint.status.replaceAll("_", " ")}` : ""}`
+        : "A complaint notification was received.";
+
+      showBrowserNotification({ title, body });
+    };
+
+    socket.on("complaint:update", (complaint) => handleComplaintEvent("complaint:update", complaint));
+    socket.on("complaint:new", (complaint) => handleComplaintEvent("complaint:new", complaint));
 
     return () => {
       socket.off("complaint:update");
@@ -76,6 +120,24 @@ export default function DashboardPage() {
       socket.disconnect();
     };
   }, [router, elevatedRoles]);
+
+  const enableBrowserNotifications = async () => {
+    const permission = await requestBrowserNotificationPermission();
+    if (permission === "granted") {
+      browserNotificationStateRef.current = "enabled";
+      setBrowserNotificationState("enabled");
+      return;
+    }
+
+    if (permission === "unsupported") {
+      browserNotificationStateRef.current = "unsupported";
+      setBrowserNotificationState("unsupported");
+      return;
+    }
+
+    browserNotificationStateRef.current = "disabled";
+    setBrowserNotificationState("disabled");
+  };
 
   const handleCreateComplaint = async (payload) => {
     await api.post("/complaints", payload);
@@ -168,6 +230,29 @@ export default function DashboardPage() {
           Logout
         </button>
       </div>
+
+      {browserNotificationState !== "enabled" && browserNotificationState !== "disabled" && browserNotificationState !== "unsupported" && (
+        <div className="rounded-2xl border border-teal/30 bg-slate-900/80 p-4 md:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold">Enable browser notifications</h2>
+            <p className="text-sm text-slate-400 mt-1">
+              Get a browser alert when your complaint is created or updated. Your choice is saved in a cookie.
+            </p>
+          </div>
+          <button
+            onClick={enableBrowserNotifications}
+            className="px-5 py-2 rounded-lg bg-gradient-to-r from-teal to-mint text-dark-navy font-semibold"
+          >
+            Enable notifications
+          </button>
+        </div>
+      )}
+
+      {browserNotificationState === "unsupported" && (
+        <div className="rounded-2xl border border-slate-700 bg-slate-900/80 p-4 text-sm text-slate-400">
+          Browser notifications are not supported in this browser.
+        </div>
+      )}
 
       {/* Stats Section */}
       {(elevatedRoles.includes(role) || role === "staff" || role === "faculty") && (
