@@ -7,7 +7,8 @@ export default function robots() {
         disallow: ["/api/", "/dashboard/admin/sensitive/"],
       },
     ],
-    sitemap: "https://smartcampus.edu/sitemap.xml",
-    host: "https://smartcampus.edu",
+    sitemap: "https://sccsms.vercel.app/sitemap.xml",
+    host: "https://sccsms.vercel.app",
+    crawlDelay: 500
   };
 }

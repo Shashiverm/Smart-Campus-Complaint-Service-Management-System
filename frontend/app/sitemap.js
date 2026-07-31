@@ -1,5 +1,5 @@
 export default async function sitemap() {
-  const baseUrl = "https://smartcampus.edu"; // Production domain
+  const baseUrl = "https://sccsms.vercel.app"; // Production Vercel domain
 
   const routes = [
     "",

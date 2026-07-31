@@ -10,7 +10,7 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL("https://smartcampus.edu"),
+  metadataBase: new URL("https://sccsms.vercel.app/"),
   title: {
     default: "Smart Campus Complaint & Service Management System",
     template: "%s | Smart Campus System"
