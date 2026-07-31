@@ -59,7 +59,7 @@ body::before {
   transform: translateY(-4px);
 }
 
-/* Smooth Transitions */
+/* Smooth Transitions & Advanced Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -115,10 +115,34 @@ body::before {
 
 @keyframes shimmer {
   0% {
-    background-position: -1000px 0;
+    background-position: -200% 0;
   }
   100% {
-    background-position: 1000px 0;
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(52, 211, 153, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
   }
 }
 
@@ -140,6 +164,40 @@ body::before {
 
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+.text-gradient-shimmer {
+  background: linear-gradient(90deg, #34d399 0%, #0a7075 25%, #6ba3be 50%, #34d399 75%, #0a7075 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Glass Card Interactive Effects */
+.glass-card-interactive {
+  background: rgba(30, 41, 59, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(107, 163, 190, 0.25);
+  box-shadow: 0 10px 30px rgba(10, 112, 117, 0.12);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-interactive:hover {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(52, 211, 153, 0.5);
+  box-shadow: 0 20px 40px rgba(10, 112, 117, 0.25), 0 0 20px rgba(52, 211, 153, 0.15);
+  transform: translateY(-6px) scale(1.01);
 }
 
 /* Form Styling */
